@@ -1,0 +1,7 @@
+{
+  "name": "DartsScorer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
