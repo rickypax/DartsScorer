@@ -1,0 +1,23 @@
+h1{
+    font-size: 3rem;
+}
+
+.player-button{
+    width: 100%;
+}
+
+.player1Card{
+    border: 1px solid red;
+}
+
+.player2Card{
+    border: 1px solid blue;
+}
+
+.active{
+    background-color: #444444;
+}
+
+.score-button{
+    width: 100%;
+}
