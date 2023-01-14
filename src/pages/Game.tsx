@@ -16,10 +16,11 @@ import {
     IonRow,
     IonText,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    useIonToast
 } from '@ionic/react';
 import { useState } from 'react';
-import { home as homeIcon } from 'ionicons/icons';
+import { home as homeIcon, sparkles as sparklesIcon } from 'ionicons/icons';
 
 const Game: React.FC = () => {
     const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -27,48 +28,76 @@ const Game: React.FC = () => {
     const [player2Score, setPlayer2Score] = useState(501);
     const [currentScore, setCurrentScore] = useState(0);
     const [currentScoreString, setCurrentScoreString] = useState('');
+    const [winToast] = useIonToast();
 
     const handleScoreCreation = (score) => {
         setCurrentScoreString(currentScoreString + score);
     }
+
+    const showWinToast = (playernumber) => {
+        console.log('TOAST');
+        winToast({
+            message: "Player " + playernumber + " wins!",
+            duration: 0,
+            icon: sparklesIcon,
+            position: 'middle',
+            buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel'
+                }
+              ],
+        });
+    };
 
     const handleConfirmScore = (confirm) => {
         if (confirm) {
             var dartsNumber = (currentScoreString.split('+').length);
             console.log("Current player: " + currentPlayer);
             console.log("Number of darts: " + dartsNumber);
-            if (dartsNumber === 3) {
 
+            let score = 0;
+            setCurrentScoreString(currentScoreString + '+');
+            currentScoreString.split('+').forEach((value) => {
+                console.log(value);
+                switch (value.substring(0, 1)) {
+                    case 'T':
+                        score = score + 3 * parseInt(value.substring(1));
+                        break;
+                    case 'D':
+                        score = score + 2 * parseInt(value.substring(1));
+                        break;
+                    case 'S':
+                        score = score + + parseInt(value.substring(1));
+                        break;
+                    default:
+                        console.log('ERROR');
+                        break;
+                }
+                console.log(score);
+            })
+
+            setCurrentScore(score);
+
+            if (dartsNumber === 3) {
                 if (currentPlayer === 1) {
-                    setPlayer1Score(player1Score - currentScore);
+                    setPlayer1Score(player1Score - score);
+                    if (player1Score - score === 0) {
+                        console.log('WIN');
+                        showWinToast(1);
+                    }
                     setCurrentPlayer(2);
                 } else if (currentPlayer === 2) {
-                    setPlayer2Score(player2Score - currentScore);
+                    setPlayer2Score(player2Score - score);
+                    if (player2Score - score === 0) {
+                        console.log('WIN');
+                        showWinToast(2);
+                    }
                     setCurrentPlayer(1);
                 }
 
                 setCurrentScoreString('');
                 setCurrentScore(0);
-
-            } else {
-                setCurrentScore(0);
-                setCurrentScoreString(currentScoreString + '+');
-                currentScoreString.split('+').forEach((value) => {
-                    switch (value.substring(0, 1)) {
-                        case 'T':
-                            setCurrentScore(currentScore + 3 * parseInt(value.substring(1)));
-                            break;
-                        case 'D':
-                            setCurrentScore(currentScore + 2 * parseInt(value.substring(1)));
-                            break;
-                        case 'S':
-                            setCurrentScore(currentScore + parseInt(value.substring(1)));
-                            break;
-                        default:
-                            console.log('ERROR');
-                            break;
-                    }
-                })
             }
         } else {
             setCurrentScoreString('');
@@ -222,16 +251,15 @@ const Game: React.FC = () => {
                     </IonRow>
                     <IonRow>
                         <IonCol>
-                            <IonButton size="large" color="danger" expand="full" onClick={() => handleConfirmScore(false)}>Cancel</IonButton>
+                            <IonButton size="large" color="success" expand="full" onClick={() => handleConfirmScore(true)}>OK</IonButton>
                         </IonCol>
                     </IonRow>
                     <IonRow>
                         <IonCol>
-                            <IonButton size="large" color="success" expand="full" onClick={() => handleConfirmScore(true)}>OK</IonButton>
+                            <IonButton size="large" color="danger" expand="full" onClick={() => handleConfirmScore(false)}>Cancel</IonButton>
                         </IonCol>
                     </IonRow>
                 </IonGrid>
-
             </IonContent>
         </IonPage>
     );
