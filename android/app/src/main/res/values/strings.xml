@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Darts Scorer</string>
+    <string name="title_activity_main">Darts Scorer</string>
+    <string name="package_name">develop.pax.dartscorer</string>
+    <string name="custom_url_scheme">develop.pax.dartscorer</string>
+</resources>
