@@ -21,6 +21,7 @@ import {
 } from '@ionic/react';
 import { useState } from 'react';
 import { home as homeIcon, sparkles as sparklesIcon } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
 
 const Game: React.FC = () => {
     const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -29,13 +30,14 @@ const Game: React.FC = () => {
     const [currentScore, setCurrentScore] = useState(0);
     const [currentScoreString, setCurrentScoreString] = useState('');
     const [winToast] = useIonToast();
+    const [errorToast] = useIonToast();
+    const history = useHistory();
 
     const handleScoreCreation = (score) => {
         setCurrentScoreString(currentScoreString + score);
     }
 
     const showWinToast = (playernumber) => {
-        console.log('TOAST');
         winToast({
             message: "Player " + playernumber + " wins!",
             duration: 0,
@@ -43,10 +45,24 @@ const Game: React.FC = () => {
             position: 'middle',
             buttons: [
                 {
-                  text: 'Cancel',
-                  role: 'cancel'
+                    text: 'Cancel',
+                    role: 'cancel'
                 }
-              ],
+            ],
+        });
+    };
+
+    const showErrorToast = (msg) => {
+        errorToast({
+            message: "Error! " + msg,
+            duration: 0,
+            position: 'middle',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel'
+                }
+            ],
         });
     };
 
@@ -81,18 +97,30 @@ const Game: React.FC = () => {
 
             if (dartsNumber === 3) {
                 if (currentPlayer === 1) {
-                    setPlayer1Score(player1Score - score);
+                    if (player1Score - score < 0) {
+                        console.log('Error score');
+                        showErrorToast("You can't go on negative score!");
+                        return;
+                    }
                     if (player1Score - score === 0) {
                         console.log('WIN');
-                        showWinToast(1);
+                        history.push('/gameend/1');
+                        //showWinToast(1);
                     }
+                    setPlayer1Score(player1Score - score);
                     setCurrentPlayer(2);
                 } else if (currentPlayer === 2) {
-                    setPlayer2Score(player2Score - score);
+                    if (player2Score - score < 0) {
+                        console.log('Error score');
+                        showErrorToast("You can't go on negative score!");
+                        return;
+                    }
                     if (player2Score - score === 0) {
                         console.log('WIN');
-                        showWinToast(2);
+                        history.push('/gameend/2');
+                        //showWinToast(2);
                     }
+                    setPlayer2Score(player2Score - score);
                     setCurrentPlayer(1);
                 }
 

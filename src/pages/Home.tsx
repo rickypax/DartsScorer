@@ -1,18 +1,20 @@
-import { 
+import {
   IonButton,
-  IonContent, 
-  IonFooter, 
-  IonHeader, 
-  IonIcon, 
-  IonImg, 
-  IonPage, 
-  IonText, 
-  IonTitle, 
-  IonToolbar } from '@ionic/react';
-import { 
-  play as playIcon, 
-  settings as settingsIcon, 
-  statsChart as statsChartIcon } from 'ionicons/icons';
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonPage,
+  IonText,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
+import {
+  play as playIcon,
+  settings as settingsIcon,
+  statsChart as statsChartIcon
+} from 'ionicons/icons';
 
 const Home: React.FC = () => {
   return (
@@ -42,7 +44,7 @@ const Home: React.FC = () => {
       </IonContent>
       <IonFooter collapse="fade">
         <IonToolbar>
-          <IonTitle class="home-footer-text">Darts Scorer by RickyPax </IonTitle>
+          <IonTitle class="home-footer-text">Darts Scorer by RickyPax v0.2</IonTitle>
         </IonToolbar>
       </IonFooter>
     </IonPage>

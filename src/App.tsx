@@ -4,6 +4,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import GameSettings from './pages/GameSettings';
 import Game from './pages/Game';
+import GameEnd from './pages/GameEnd';
 
 import './theme/custom.css'
 
@@ -24,6 +25,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/game">
           <Game />
+        </Route>
+        <Route exact path="/gameend/:player">
+          <GameEnd />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

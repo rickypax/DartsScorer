@@ -46,7 +46,7 @@ const GameSettings: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent class="ion-padding">
-                <IonList>
+                {/*<IonList>
                     <IonItem>
                         <IonLabel>Number of players</IonLabel>
 
@@ -60,7 +60,7 @@ const GameSettings: React.FC = () => {
 
                 {players.map((player) =>
                     <PlayerCard index={player.index} name={player.name} />
-                )}
+                )}*/}
 
                 <IonButton expand="block" size="large" routerLink="/game">
                     Start game
