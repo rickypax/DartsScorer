@@ -8,6 +8,7 @@ import {
     IonLabel,
     IonList,
     IonPage,
+    IonText,
     IonTitle,
     IonToolbar
 } from '@ionic/react';
@@ -46,6 +47,7 @@ const GameSettings: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent class="ion-padding">
+                <IonText>Game setting not available...</IonText>
                 {/*<IonList>
                     <IonItem>
                         <IonLabel>Number of players</IonLabel>

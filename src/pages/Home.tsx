@@ -15,8 +15,19 @@ import {
   settings as settingsIcon,
   statsChart as statsChartIcon
 } from 'ionicons/icons';
+import { App } from '@capacitor/app'
 
 const Home: React.FC = () => {
+  App.addListener('backButton', e => {
+    if (window.location.pathname === "/home") {
+      // Show A Confirm Box For User to exit app or not
+      let ans = window.confirm("Are you sure");
+      if (ans) {
+        App.exitApp();
+      }
+    }
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -44,7 +55,7 @@ const Home: React.FC = () => {
       </IonContent>
       <IonFooter collapse="fade">
         <IonToolbar>
-          <IonTitle class="home-footer-text">Darts Scorer by RickyPax v0.2</IonTitle>
+          <IonTitle class="home-footer-text">Darts Scorer by RickyPax v0.3</IonTitle>
         </IonToolbar>
       </IonFooter>
     </IonPage>

@@ -28,13 +28,65 @@ const Game: React.FC = () => {
     const [player1Score, setPlayer1Score] = useState(501);
     const [player2Score, setPlayer2Score] = useState(501);
     const [currentScore, setCurrentScore] = useState(0);
+    const [currentScoreArray, setCurrentScoreArray] = useState([]);
     const [currentScoreString, setCurrentScoreString] = useState('');
     const [winToast] = useIonToast();
     const [errorToast] = useIonToast();
     const history = useHistory();
+    const possibleLetters = ['T', 'D', 'S'];
 
+    /**
+     * Manages the score calculation and check if everything is ok (fist letter, second number, max 3 dart, etc)
+     * @param score 
+     */
     const handleScoreCreation = (score) => {
-        setCurrentScoreString(currentScoreString + score);
+        let length = currentScoreArray.length;
+        if (length >= 6) {
+            // the user is trinng to set more than 3 darts
+            showErrorToast("Only 3 darts!");
+            return;
+        }
+        if (length % 2 == 0) {
+            // must be a letter
+            if (!possibleLetters.includes(score)) {
+                showErrorToast("It must be a letter!");
+                return;
+            }
+        } else {
+            // must be a number
+            if (typeof score != 'number') {
+                showErrorToast("It must be a number!");
+                return;
+            }
+        }
+        currentScoreArray.push(score)
+        setCurrentScoreArray(currentScoreArray);
+        if (length % 2 != 0) {
+            // calc the current score only we have a set of letter-number
+            let calcScore = 0;
+            currentScoreArray.forEach((value, index) => {
+                switch (value) {
+                    case 'T':
+                        // TRIPLE
+                        calcScore = calcScore + 3 * parseInt(currentScoreArray[index + 1]);
+                        break;
+                    case 'D':
+                        // DOUBLE
+                        calcScore = calcScore + 2 * parseInt(currentScoreArray[index + 1]);
+                        break;
+                    case 'S':
+                        // SINGLE
+                        calcScore = calcScore + + parseInt(currentScoreArray[index + 1]);
+                        break;
+                }
+                console.log(calcScore);
+            })
+            // save current score
+            setCurrentScore(calcScore);
+        }
+        // creating the string of the current score
+        currentScoreArrayToString();
+        //console.log(currentScoreArray);
     }
 
     const showWinToast = (playernumber) => {
@@ -52,10 +104,30 @@ const Game: React.FC = () => {
         });
     };
 
+    /**
+     * Creates the score string from the score array of values
+     */
+    const currentScoreArrayToString = () => {
+        let toString = '';
+        currentScoreArray.forEach((value, index) => {
+            if (index % 2 == 0 && index != 0) {
+                // every 2 value is a new dart, so we concat with a '+'
+                toString = toString + '+';
+            }
+            toString = toString + value;
+        });
+
+        setCurrentScoreString(toString);
+    }
+
+    /**
+     * Launch a toast with the given message
+     * @param msg string message of the error
+     */
     const showErrorToast = (msg) => {
         errorToast({
             message: "Error! " + msg,
-            duration: 0,
+            duration: 2000,
             position: 'middle',
             buttons: [
                 {
@@ -68,37 +140,39 @@ const Game: React.FC = () => {
 
     const handleConfirmScore = (confirm) => {
         if (confirm) {
-            var dartsNumber = (currentScoreString.split('+').length);
+            // button 'OK' is pressed
+            var dartsNumber = (currentScoreArray.length / 2);
             console.log("Current player: " + currentPlayer);
             console.log("Number of darts: " + dartsNumber);
 
             let score = 0;
-            setCurrentScoreString(currentScoreString + '+');
-            currentScoreString.split('+').forEach((value) => {
+            currentScoreArray.forEach((value, index) => {
+                // we are considering only the letters and make the score calc with the next index of the score array
                 console.log(value);
-                switch (value.substring(0, 1)) {
+                switch (value) {
                     case 'T':
-                        score = score + 3 * parseInt(value.substring(1));
+                        // TRIPLE
+                        score = score + 3 * parseInt(currentScoreArray[index + 1]);
                         break;
                     case 'D':
-                        score = score + 2 * parseInt(value.substring(1));
+                        // DOUBLE
+                        score = score + 2 * parseInt(currentScoreArray[index + 1]);
                         break;
                     case 'S':
-                        score = score + + parseInt(value.substring(1));
-                        break;
-                    default:
-                        console.log('ERROR');
+                        // SINGLE
+                        score = score + + parseInt(currentScoreArray[index + 1]);
                         break;
                 }
                 console.log(score);
             })
-
+            // save current score
             setCurrentScore(score);
 
             if (dartsNumber === 3) {
+                // 3 darts are used, so i can save the score and check if the game is ended
                 if (currentPlayer === 1) {
+                    // PLAYER 1
                     if (player1Score - score < 0) {
-                        console.log('Error score');
                         showErrorToast("You can't go on negative score!");
                         return;
                     }
@@ -107,11 +181,13 @@ const Game: React.FC = () => {
                         history.push('/gameend/1');
                         //showWinToast(1);
                     }
+                    // saving the new score
                     setPlayer1Score(player1Score - score);
+                    // passing the turn to the next player
                     setCurrentPlayer(2);
                 } else if (currentPlayer === 2) {
+                    // PLAYER 2
                     if (player2Score - score < 0) {
-                        console.log('Error score');
                         showErrorToast("You can't go on negative score!");
                         return;
                     }
@@ -120,14 +196,20 @@ const Game: React.FC = () => {
                         history.push('/gameend/2');
                         //showWinToast(2);
                     }
+                    // saving the new score
                     setPlayer2Score(player2Score - score);
+                    // passing the turn to the next player
                     setCurrentPlayer(1);
                 }
 
+                // resetting the current score array, string and value
+                setCurrentScoreArray([]);
                 setCurrentScoreString('');
                 setCurrentScore(0);
             }
         } else {
+            // button 'CANCEL' is pressed
+            setCurrentScoreArray([]);
             setCurrentScoreString('');
             setCurrentScore(0);
         }
