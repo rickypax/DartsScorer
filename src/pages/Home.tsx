@@ -55,7 +55,7 @@ const Home: React.FC = () => {
       </IonContent>
       <IonFooter collapse="fade">
         <IonToolbar>
-          <IonTitle class="home-footer-text">Darts Scorer by RickyPax v0.3</IonTitle>
+          <IonTitle class="home-footer-text">Darts Scorer by RickyPax v0.4</IonTitle>
         </IonToolbar>
       </IonFooter>
     </IonPage>

@@ -20,7 +20,7 @@ interface RouteParams {
 
 const GameEnd: React.FC = () => {
     const props = useParams<RouteParams>();
-    console.log(props);
+    //console.log(props);
 
     return (
         <IonPage>

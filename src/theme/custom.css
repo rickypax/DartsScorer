@@ -6,6 +6,7 @@ h1{
     width: 50%;
     position: relative;
     left: 24%;
+    margin-bottom: 30px;
 }
 
 .home-footer-text{
@@ -18,10 +19,12 @@ h1{
 }
 
 .player1Card{
+    width: 100%;
     border: 1px solid red;
 }
 
 .player2Card{
+    width: 100%;
     border: 1px solid blue;
 }
 
@@ -31,4 +34,13 @@ h1{
 
 .score-button{
     width: 100%;
+}
+
+.score-cards{
+    margin: 6px;
+}
+
+.score-cards-content{
+    padding: 10px;
+    height: 40px;
 }
